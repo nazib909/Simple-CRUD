@@ -1,62 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title> Profile deshboard </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <style>
-        .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
-}
-
-.title {
-  color: grey;
-  font-size: 18px;
-}
-
-button {
-  border: none;
-  outline: 0;
-  display: inline-block;
-  padding: 8px;
-  color: white;
-  background-color: #000;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  font-size: 18px;
-}
-
-a {
-  text-decoration: none;
-  font-size: 22px;
-  color: black;
-}
-
-button:hover, a:hover {
-  opacity: 0.7;
-}
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profiles</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
+
 <body>
-{% for i in pro %}
-    <div class="card">
-      <img src="{{i.proPic.url}}" alt="John" style="width:100%">
-      <h1>{{i.name}}</h1>
-      <h1>{{i.email}}</h1>
-      <p class="title">Jr. Python & Faculty </p>
-      <p>Creative It Institute</p>
-      <a href="#"><i class="fa fa-dribbble"></i></a>
-      <a href="#"><i class="fa fa-twitter"></i></a>
-      <a href="#"><i class="fa fa-linkedin"></i></a>
-      <a href="#"><i class="fa fa-facebook"></i></a>
-      <p> <a href="{% url 'update' i.id %}"> <button>update</button> </a> </p>
-      <p> <a href=""> <button>delete</button> </a> </p>
-      <p> <a href=""> <button> Back To Home </button> </a> </p>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <h5>Simple CRUD</h5>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Add Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'Prof' %}">View Profiles</a>
+          </li>
+        </ul>
+        <form class="d-flex" action="{% url 'search' %}" role="search" method="GET">
+          {% csrf_token %}
+          <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
     </div>
-{% endfor %}
+  </nav>
+
+
+  {% if profiles %}
+  <div class="cards d-flex flex-wrap gap-5 justify-content-center mt-2">
+    {% for profile in profiles %}
+    <div class="card" style="width: 18rem;">
+      {% if profile.proPic %}
+      <img src="{{profile.proPic.url}}" class="card-img-top" alt="..." style="width:100%;">
+      {% else %}
+      <img src="https://www.corporatewebtechnologies.com/wp-content/uploads/avatar-1.png" class="card-img-top" alt="..."
+        style="width:100%;">
+      {% endif %}
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example....</p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">{{profile.name}}</li>
+        <li class="list-group-item">{{profile.email}}</li>
+      </ul>
+      <div class="card-body">
+        <a href="{% url 'update' profile.id %}"> <button>Update</button> </a>
+        <a href="{% url 'delete' profile.id %}"> <button>Delete</button> </a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>No Profile Found !</strong>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endif %}
+
+
 </body>
+
 </html>
